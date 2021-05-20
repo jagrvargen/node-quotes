@@ -9,7 +9,7 @@
   "author": "Jesse Hedden",
   "license": "ISC",
   "dependencies": {
-    "readline-sync": "^1.4.10",
-    "request": "^2.88.2"
+    "node-fetch": "^2.6.1",
+    "readline-sync": "^1.4.10"
   }
 }
