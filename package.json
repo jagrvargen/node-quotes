@@ -1,0 +1,15 @@
+{
+  "name": "quotes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "author": "Jesse Hedden",
+  "license": "ISC",
+  "dependencies": {
+    "readline-sync": "^1.4.10",
+    "request": "^2.88.2"
+  }
+}
