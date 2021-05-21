@@ -1,6 +1,5 @@
-const axios = require('axios').default;
+const getQuote = require('./routes/get-quotes');
 const readline = require('readline-sync');
-
 const endpoint = 'https://api.taylor.rest'
 
 let a = Number(readline.question("\nHow many quotes would you love to live by? (max 10) "));
@@ -13,7 +12,7 @@ while (a < 1 || a > 10) {
 console.log();
 
 Promise.all(Array(a).fill(endpoint).map((url, _) =>
-    axios.get(url).then(resp => resp.data)
+    getQuote(url).then(resp => resp.data)
     .then(data => console.log(data.quote))
     .catch(error => console.log(error))
 ));

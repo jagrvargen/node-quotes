@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "node app.js"
+    "start": "node src/app.js",
+    "test": "echo 'error'"
   },
   "author": "Jesse Hedden",
   "license": "ISC",
