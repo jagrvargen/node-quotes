@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const axios = require('axios').default;
 const readline = require('readline-sync');
 
 const endpoint = 'https://api.taylor.rest'
@@ -13,7 +13,7 @@ while (a < 1 || a > 10) {
 console.log();
 
 Promise.all(Array(a).fill(endpoint).map((url, _) =>
-    fetch(url).then(resp => resp.json())
-    .then(json => console.log(json["quote"]))
+    axios.get(url).then(resp => resp.data)
+    .then(data => console.log(data.quote))
     .catch(error => console.log(error))
 ));
