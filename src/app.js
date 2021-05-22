@@ -1,6 +1,7 @@
 const returnResponse = require('./routes/get-jokes');
 const process = require('process');
 const fs = require('fs');
+const fsPromises = require('fs/promises');
 
 const filename = './jokes.txt'
 
@@ -9,15 +10,15 @@ function randInt(max) {
 }
 
 function validateResponse(response) {
-    let jokes = response.data.results
-    if (typeof jokes === 'undefined' || jokes === null ||  jokes.length === 0) {
+    const jokes = response.data.results
+    if (!jokes || !jokes.length) {
         throw new Error("No joke found");
     }
     return jokes[randInt(jokes.length)].joke
 }
 
 function saveJoke(joke) {
-    fs.appendFile(filename, joke + "\n", (err) => {
+    fs.appendFile(filename, joke.trim().replace(/\r?\n|\r/g, " ") + "\n", (err) => {
         if (err) {
             throw err;
         }
@@ -26,10 +27,8 @@ function saveJoke(joke) {
 }
 
 function findLeader() {
-    fs.readFile(filename, encoding='utf8', (err, data) => {
-        if (err) {
-            return "Unable to read jokes.txt"
-        }
+    return fsPromises.readFile(filename, encoding='utf8')
+    .then(data => {
         let leaders = {}
         data = data.replace(/^\s*\n/gm, "").split("\n");
         data.forEach(line => {
@@ -48,9 +47,11 @@ function findLeader() {
                 leader = joke;
             }
         })
-        console.log(`returning leader I hope... ${leader}`);
+        return leader;
     })
-    return leader;
+    .catch(err => {
+        return "Unable to read jokes.txt"
+    })
 }
 
 if (!process.argv[2]) {
@@ -64,15 +65,15 @@ if (!process.argv[2]) {
         .then(joke => saveJoke(joke))
         .catch(error => console.log(error))
 
-        if (result.leaderboard != null) {
-            Promise.resolve(findLeader())
+        if (result.leaderboard) {
+            findLeader()
             .then(leader => console.log(`Most popular joke is ${leader}`))
             .catch(err => console.log(err));
         }
     });
 } else {
     const searchTerm = process.argv[2]
-    Promise.resolve(returnResponse(searchTerm))
+    returnResponse(searchTerm)
         .then(resp => validateResponse(resp))
         .then(joke => saveJoke(joke))
         .catch(error => console.log(error))
