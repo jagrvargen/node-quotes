@@ -29,10 +29,7 @@ ee.on('saveJoke', (joke) => {
         if (err) {
             console.log(err)
             throw err;
-        } else {
-            console.log('Reading file')
-            fs.readFileSync(filename, 'utf8')
-        }
+        } 
         console.log(joke)
     });
 })
